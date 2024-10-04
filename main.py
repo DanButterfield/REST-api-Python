@@ -26,15 +26,24 @@ video_put_args.add_argument("likes", type=int, help="Likes on video is required"
 video_put_args.add_argument("views", type=int, help="Views of video is required", required=True)
 
 video_update_args = reqparse.RequestParser()
-video_update_args.add_argument("name", type=str, help="Name of video is required", required=True)  # same thing as nullable
+video_update_args.add_argument("name", type=str, help="Name of video is required",
+                               required=True)  # same thing as nullable
 video_update_args.add_argument("likes", type=int, help="Likes on video is required", )
 video_update_args.add_argument("views", type=int, help="Views of video is required")
+
+videos = {}
+
 resource_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'views': fields.Integer,
     'likes': fields.Integer
 }
+
+
+def abort_if_video_id_doesnt_exist(video_id):
+    if video_id not in videos:
+        abort(404, message="No Video with that ID exists")
 
 
 class Video(Resource):
@@ -60,7 +69,7 @@ class Video(Resource):
     @marshal_with(resource_fields)
     def patch(self, video_id):
         args = video_update_args.parse_args()
-        #query data, get object, modify object, add back in and commit
+        # query data, get object, modify object, add back in and commit
         result = VideoModel.query.filter_by(id=video_id).first()
         if not result:
             abort(404, message="Video doesn't exist, No Update")
@@ -77,7 +86,7 @@ class Video(Resource):
         return result
 
     def delete(self, video_id):
-        abort_if_id_doesnt_exist()
+        abort_if_video_id_doesnt_exist()
         del videos[video_id]
         return '', 204
 
