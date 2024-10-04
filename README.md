@@ -30,7 +30,6 @@ REST is  a style for providing standards between computer systems on the web. Ma
 with each other. An API following the REST styles are called REST APIs, generally REST is a guideline to manage communications
 on a complex network.
 
-
 For Example:
 1 Program developed in Python, and one in Java. An API would allow functionality in the Java application
 to make requests to the Python application which would then give a response back to the Java application, via JSON 
